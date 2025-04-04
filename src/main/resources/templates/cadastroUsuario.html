@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Cadastro de usuario</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    
+    <body>
+        <h1>Registro de usuário</h1>
+        <form>
+            <div>
+                <label for="nome">Nome: </label>
+                <input type="text" id="nome" name="nome" required>
+            </div>
+            <div>
+                <label for="nascimento">Data de Nascimento: </label>
+                <input type="date" id="nascimento" name="nascimento" required>
+            </div>
+            <div>
+                <label for="telefone">Telefone: </label>
+                <input type="tel" id="telefone" name="telefone" placeholder="(xx) xxxxx-xxxx" required>
+            </div>
+            <div>
+                <label for="email">E-mail: </label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <hr>
+            <div>
+                <label for="login">Login: </label>
+                <input type="text" id="login" name="login" required>
+            </div>
+            <div>
+                <label for="senha">Senha: </label>
+                <input type="password" id="senha" name="senha" required>
+            </div>
+            <input type="hidden" id="tipoUsuario" name="tipoUsuario" value="cliente">
+            <button type="button">Registrar</button>
+        </form>
+        
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>
