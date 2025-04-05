@@ -83,12 +83,13 @@ $("#frmProduto").validate({
             maxlength: 25
         },
         valorUnitario: {
-            required: true
+            required: true,
+            number: true
         },
         quantidade: {
             required: true,
-            minlength: 0,
-            maxlength: 200
+            min: 0,
+            max: 200
         },
         categoria: {
             required: true,
@@ -98,15 +99,16 @@ $("#frmProduto").validate({
     messages: {
         nome: {
             required: "O campo nome do produto é obrigatório.",
-            maxlength: "O campo deve ter no máximo 15 caracteres."
+            maxlength: "O campo deve ter no máximo 25 caracteres."
         },
         valorUnitario: {
-            required: "O campo valor unitário é obrigatório."
+            required: "O campo valor unitário é obrigatório.",
+            num: "O campo deve conter apenas números."
         },
         quantidade: {
             required: "O campo quantidade é obrigatório.",
-            minlength: "O campo deve ter apenas números positivos.",
-            maxlength: "A quantidade maxima é de 200."
+            min: "O campo deve ter apenas números positivos.",
+            max: "A quantidade maxima é de 200."
         },
         categoria: {
             required: "O campo categoria é obrigatório.",
@@ -118,12 +120,12 @@ $("#frmProduto").validate({
 $("#frmPedido").validate({
     rules: {
         quantidade: {
-            minlength: 0
+            min: 0
         }
     },
     messages: {
         quantidade: {
-            minlength: "Este campo so aceita números positivos."
+            min: "Este campo so aceita números positivos."
         }
     }
 });
