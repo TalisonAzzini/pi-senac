@@ -32,6 +32,7 @@ public class ItemPedido {
     @Column(precision = 10, scale = 2)
     private BigDecimal subtotal;
 
+    // Calcula o subtotal antes de persistir
     @PrePersist
     @PreUpdate
     private void calcularSubtotal() {

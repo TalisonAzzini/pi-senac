@@ -1,5 +1,6 @@
 package com.senac.pi.model;
 
+import com.senac.pi.model.enums.StatusPedido;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -42,14 +43,12 @@ public class Pedido {
     @Enumerated(EnumType.STRING)
     private StatusPedido status = StatusPedido.ABERTO;
 
-    // Método para adicionar item (mantém a consistência)
     public void adicionarItem(ItemPedido item) {
         item.setPedido(this);
         this.itens.add(item);
         this.calcularTotal();
     }
-
-    // Atualiza o total baseado nos itens
+    
     public void calcularTotal() {
         this.total = itens.stream()
             .map(ItemPedido::getSubtotal)
