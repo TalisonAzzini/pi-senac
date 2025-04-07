@@ -41,7 +41,7 @@ public class PedidoController {
         return "cadastroPedido";
     }
 
-    
+    //OK
     @PostMapping("/adicionar-item")
     public ResponseEntity<ItemPedidoEntity> adicionarItem(@RequestBody ItemPedidoDTO itemDTO) {
         ProdutoEntity produto = produtoService.buscarPorId(itemDTO.getProdutoId());
@@ -61,6 +61,7 @@ public class PedidoController {
         return ResponseEntity.ok(item);
     }
 
+    //OK
     @PostMapping("/finalizar")
     public ResponseEntity<String> finalizarPedido(@RequestBody PedidoDTO pedidoDTO) {
         try {
@@ -90,4 +91,14 @@ public class PedidoController {
         model.addAttribute("pedidos", pedidoService.listarTodos());
         return "listaPedidos";
     }
+    
+    @GetMapping("/detalhes/{id}")
+    public String detalhesPedido(@PathVariable Long id, Model model) {
+        PedidoEntity pedido = pedidoService.buscarPorId(id)
+            .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
+
+        model.addAttribute("pedido", pedido);
+        return "detalhesPedido";
+    }
+    
 }
