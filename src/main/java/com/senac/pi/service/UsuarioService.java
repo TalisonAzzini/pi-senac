@@ -35,7 +35,7 @@ public class UsuarioService {
     
     public UsuarioEntity buscarPorLoginESenha(String login, String senha) {
         UsuarioEntity usuario = usuarioRepository.findByLogin(login);
-        if (usuario != null && usuario.getSenha().equals(senha)) { // Simples comparação sem criptografia
+        if (usuario != null && usuario.getSenha().equals(senha)) {
             return usuario;
         }
         return null;

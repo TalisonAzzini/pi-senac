@@ -1,32 +1,7 @@
-$(document).ready(function() {
+$(document).ready(function () {
     let pedidoId = null;
     let itens = [];
     let total = 0;
-
-    $('#btnAdicionar').click(function () {
-        const produtoId = $('#produto').val();
-        const quantidade = parseInt($('#quantidade').val());
-
-        $.ajax({
-            url: '/pedidos/adicionar-item',
-            method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({
-                produtoId: produtoId,
-                quantidade: quantidade
-            }),
-            success: function (response) {
-                console.log("Item adicionado com sucesso:", response);
-                // aqui você pode adicionar o item à tabela, etc
-            },
-            error: function (xhr) {
-                alert('Erro ao adicionar item: ' + xhr.responseText);
-            }
-        });
-
-        $('#produto').val('');
-        $('#quantidade').val(1);
-    });
 
     function atualizarTabelaItens() {
         const tbody = $('#itensPedido');
@@ -44,6 +19,46 @@ $(document).ready(function() {
             `);
             total += item.subtotal;
         });
+
         $('#totalPedido').text('R$ ' + total.toFixed(2).replace('.', ','));
     }
+
+    $('#btnAdicionar').click(function () {
+        const produtoId = $('#produto').val();
+        const produtoNome = $('#produto option:selected').text();
+        const quantidade = parseInt($('#quantidade').val());
+
+        if (!produtoId || quantidade <= 0) {
+            alert('Selecione um produto e quantidade válida.');
+            return;
+        }
+
+        $.ajax({
+            url: '/pedidos/adicionar-item',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                produtoId: produtoId,
+                quantidade: quantidade
+            }),
+            success: function (response) {
+                const precoUnitario = response.subtotal / quantidade;
+
+                itens.push({
+                    produtoNome: produtoNome,
+                    quantidade: quantidade,
+                    preco: precoUnitario,
+                    subtotal: response.subtotal
+                });
+
+                atualizarTabelaItens();
+            },
+            error: function (xhr) {
+                alert('Erro ao adicionar item: ' + xhr.responseText);
+            }
+        });
+
+        $('#produto').val('');
+        $('#quantidade').val(1);
+    });
 });

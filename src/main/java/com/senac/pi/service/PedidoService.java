@@ -51,8 +51,7 @@ public class PedidoService {
         item.setSubtotal(produto.getPreco().multiply(BigDecimal.valueOf(quantidade)));
         
         itemPedidoRepository.save(item);
-        
-        // Atualizar total do pedido
+
         BigDecimal novoTotal = pedido.getItens().stream()
             .map(ItemPedidoEntity::getSubtotal)
             .reduce(BigDecimal.ZERO, BigDecimal::add);

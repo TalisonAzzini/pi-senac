@@ -44,7 +44,7 @@ public class PedidoController {
         ProdutoEntity produto = produtoService.buscarPorId(itemDTO.getProdutoId());
 
         if (produto == null) {
-            return ResponseEntity.badRequest().build(); // produto não encontrado
+            return ResponseEntity.badRequest().build();
         }
 
         Integer quantidade = itemDTO.getQuantidade();
