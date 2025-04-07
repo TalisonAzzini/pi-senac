@@ -9,11 +9,14 @@ import com.senac.pi.repository.PedidoRepository;
 import com.senac.pi.repository.ProdutoRepository;
 import com.senac.pi.repository.UsuarioRepository;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class PedidoService {
 
     @Autowired
@@ -33,12 +36,13 @@ public class PedidoService {
             .orElseThrow(() -> new RuntimeException("Vendedor não encontrado"));
         UsuarioEntity cliente = usuarioRepository.findById(clienteId)
             .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
-        
+
         PedidoEntity pedido = new PedidoEntity();
         pedido.setVendedor(vendedor);
         pedido.setCliente(cliente);
         pedido.setTotal(BigDecimal.ZERO);
-        
+        pedido.setItens(new ArrayList<>());
+
         return pedidoRepository.save(pedido);
     }
 
@@ -56,11 +60,14 @@ public class PedidoService {
 
         itemPedidoRepository.save(item);
 
+        pedido.getItens().add(item);
+
         BigDecimal novoTotal = pedido.getItens().stream()
             .map(ItemPedidoEntity::getSubtotal)
             .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         pedido.setTotal(novoTotal);
+
         pedidoRepository.save(pedido);
     }
 
