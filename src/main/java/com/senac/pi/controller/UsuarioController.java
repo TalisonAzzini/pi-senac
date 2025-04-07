@@ -29,7 +29,6 @@ public class UsuarioController {
     public String login(@RequestParam String login, 
                        @RequestParam String senha,
                        HttpSession session) {
-
         UsuarioEntity usuario = usuarioService.buscarPorLoginESenha(login, senha);
 
         if (usuario != null) {
@@ -39,7 +38,7 @@ public class UsuarioController {
             return "redirect:/?erro=Login+ou+senha+invalidos";
         }
     }
-    
+
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.removeAttribute("usuarioLogado");

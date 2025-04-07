@@ -12,9 +12,21 @@ public class RedirectController {
     public String redirectByRole(HttpSession session) {
         UsuarioEntity usuario = (UsuarioEntity) session.getAttribute("usuarioLogado");
         
-        if (usuario != null && "VENDEDOR".equals(usuario.getTipo())) {
-            return "adminMenu";
+        if (usuario == null) {
+            return "redirect:/";
         }
-        return "menu";
+        
+        if ("VENDEDOR".equals(usuario.getTipo())) {
+            return "adminMenu"; // Retorna o template adminMenu.html
+        }
+        return "menu"; // Retorna o template menu.html
+    }
+
+    @GetMapping("/")
+    public String index(HttpSession session) {
+        if (session.getAttribute("usuarioLogado") != null) {
+            return "redirect:/redirect-by-role";
+        }
+        return "index";
     }
 }

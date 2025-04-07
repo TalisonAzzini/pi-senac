@@ -9,6 +9,11 @@
     </head>
 
     <body class="p-4">
+        <div class="mt-4">
+            <a th:href="@{/redirect-by-role}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Voltar ao Menu
+            </a>
+        </div>
         <div class="container">
             <h1 class="mb-4">Registro de Usuário</h1>
             <div th:if="${mensagemErro}" class="alert alert-danger mb-3" th:text="${mensagemErro}"></div>
