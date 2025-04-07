@@ -1,31 +1,55 @@
 <!DOCTYPE html>
-
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
     <head>
         <title>Lista de Desejos</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     </head>
+    
     <body class="p-4">
         <div class="container">
             <h1 class="mb-4"><strong>Lista de Desejos</strong></h1>
-            <p><strong>Nome:</strong> <!-- Inserir nome do usuário aqui --></p>
-            <table class="table table-striped table-bordered">
+            <p><strong>Nome:</strong> <span th:text="${nomeUsuario}"></span></p>
+            
+            <div th:if="${param.sucesso}" class="alert alert-success">
+                Produto removido da lista de desejos com sucesso!
+            </div>
+            
+            <div th:if="${#lists.isEmpty(itens)}" class="alert alert-info">
+                Sua lista de desejos está vazia.
+            </div>
+
+            <table class="table table-striped table-bordered" th:unless="${#lists.isEmpty(itens)}">
                 <thead class="table-dark">
                     <tr>
                         <th>Produto</th>
                         <th>Valor Unitário (R$)</th>
-                        <th>Quantidade</th>
                         <th>Categoria</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- ADICIONAR PRODUTOS DA LISTA DE DESEJOS -->
+                    <tr th:each="item : ${itens}">
+                        <td th:text="${item.produto.nome}"></td>
+                        <td th:text="${#numbers.formatDecimal(item.produto.preco, 1, 2)}"></td>
+                        <td th:text="${item.produto.categoria}"></td>
+                        <td>
+                            <form th:action="@{/lista/desejos/remover}" method="post">
+                                <input type="hidden" name="produtoId" th:value="${item.produto.id}">
+                                <button type="submit" class="btn btn-outline-danger btn-sm">
+                                    <i class="bi bi-trash"></i> Remover
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
+            
+            <a href="/produtos/lista" class="btn btn-primary mt-3">Voltar para lista de produtos</a>
         </div>
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>
