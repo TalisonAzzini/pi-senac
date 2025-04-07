@@ -29,8 +29,10 @@ public class PedidoService {
     private ProdutoRepository produtoRepository;
 
     public PedidoEntity criarPedido(Long vendedorId, Long clienteId) {
-        UsuarioEntity vendedor = usuarioRepository.findById(vendedorId).orElseThrow();
-        UsuarioEntity cliente = usuarioRepository.findById(clienteId).orElseThrow();
+        UsuarioEntity vendedor = usuarioRepository.findById(vendedorId)
+            .orElseThrow(() -> new RuntimeException("Vendedor não encontrado"));
+        UsuarioEntity cliente = usuarioRepository.findById(clienteId)
+            .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
         
         PedidoEntity pedido = new PedidoEntity();
         pedido.setVendedor(vendedor);
@@ -41,25 +43,28 @@ public class PedidoService {
     }
 
     public void adicionarItem(Long pedidoId, Long produtoId, Integer quantidade) {
-        PedidoEntity pedido = pedidoRepository.findById(pedidoId).orElseThrow();
-        ProdutoEntity produto = produtoRepository.findById(produtoId).orElseThrow();
-        
+        PedidoEntity pedido = pedidoRepository.findById(pedidoId)
+            .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
+        ProdutoEntity produto = produtoRepository.findById(produtoId)
+            .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+
         ItemPedidoEntity item = new ItemPedidoEntity();
         item.setPedido(pedido);
         item.setProduto(produto);
         item.setQuantidade(quantidade);
         item.setSubtotal(produto.getPreco().multiply(BigDecimal.valueOf(quantidade)));
-        
+
         itemPedidoRepository.save(item);
 
         BigDecimal novoTotal = pedido.getItens().stream()
             .map(ItemPedidoEntity::getSubtotal)
             .reduce(BigDecimal.ZERO, BigDecimal::add);
-        
+
         pedido.setTotal(novoTotal);
         pedidoRepository.save(pedido);
     }
 
+    //OK
     public List<PedidoEntity> listarTodos() {
         return pedidoRepository.findAll();
     }

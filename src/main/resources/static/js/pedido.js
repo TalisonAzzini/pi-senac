@@ -1,5 +1,4 @@
 $(document).ready(function () {
-    let pedidoId = null;
     let itens = [];
     let total = 0;
 
@@ -24,8 +23,9 @@ $(document).ready(function () {
     }
 
     $('#btnAdicionar').click(function () {
-        const produtoId = $('#produto').val();
-        const produtoNome = $('#produto option:selected').text();
+        const produtoSelect = $('#produto');
+        const produtoId = produtoSelect.val();
+        const produtoNome = produtoSelect.find('option:selected').text().split(' (R$')[0];
         const quantidade = parseInt($('#quantidade').val());
 
         if (!produtoId || quantidade <= 0) {
@@ -42,23 +42,58 @@ $(document).ready(function () {
                 quantidade: quantidade
             }),
             success: function (response) {
-                const precoUnitario = response.subtotal / quantidade;
+                const precoUnitario = parseFloat(response.subtotal) / quantidade;
 
                 itens.push({
+                    produtoId: produtoId,
                     produtoNome: produtoNome,
                     quantidade: quantidade,
                     preco: precoUnitario,
-                    subtotal: response.subtotal
+                    subtotal: parseFloat(response.subtotal)
                 });
 
                 atualizarTabelaItens();
+                $('#produto').val('');
+                $('#quantidade').val(1);
             },
             error: function (xhr) {
                 alert('Erro ao adicionar item: ' + xhr.responseText);
             }
         });
+    });
+    
+    $('#frmPedido').submit(function (e) {
+        e.preventDefault();
 
-        $('#produto').val('');
-        $('#quantidade').val(1);
+        const vendedorId = $('#vendedor').val();
+        const clienteId = $('#cliente').val();
+
+        if (!vendedorId || !clienteId || itens.length === 0) {
+            alert("Preencha todos os campos e adicione ao menos um item.");
+            return;
+        }
+
+        const itensParaEnvio = itens.map(item => ({
+            produtoId: item.produtoId,
+            quantidade: item.quantidade
+        }));
+
+        $.ajax({
+            url: '/pedidos/finalizar',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                vendedorId: vendedorId,
+                clienteId: clienteId,
+                itens: itensParaEnvio
+            }),
+            success: function () {
+                alert("Pedido finalizado com sucesso!");
+                window.location.href = "/pedidos/lista";
+            },
+            error: function (xhr) {
+                alert("Erro ao finalizar pedido: " + xhr.responseText);
+            }
+        });
     });
 });

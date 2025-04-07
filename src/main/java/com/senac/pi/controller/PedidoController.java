@@ -2,12 +2,13 @@ package com.senac.pi.controller;
 
 import com.senac.pi.model.ItemPedidoDTO;
 import com.senac.pi.model.ItemPedidoEntity;
+import com.senac.pi.model.PedidoDTO;
+import com.senac.pi.model.PedidoEntity;
 import com.senac.pi.model.ProdutoEntity;
 import com.senac.pi.repository.ProdutoRepository;
 import com.senac.pi.repository.UsuarioRepository;
 import com.senac.pi.service.PedidoService;
 import com.senac.pi.service.ProdutoService;
-import jakarta.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class PedidoController {
 
     @Autowired
     private PedidoService pedidoService;
-    
+
     @Autowired
     private ProdutoService produtoService;
     
@@ -31,6 +32,7 @@ public class PedidoController {
     @Autowired
     private ProdutoRepository produtoRepository;
 
+    //OK
     @GetMapping("/novo")
     public String novoPedido(Model model) {
         model.addAttribute("vendedores", usuarioRepository.findByTipo("VENDEDOR"));
@@ -39,6 +41,7 @@ public class PedidoController {
         return "cadastroPedido";
     }
 
+    
     @PostMapping("/adicionar-item")
     public ResponseEntity<ItemPedidoEntity> adicionarItem(@RequestBody ItemPedidoDTO itemDTO) {
         ProdutoEntity produto = produtoService.buscarPorId(itemDTO.getProdutoId());
@@ -59,11 +62,29 @@ public class PedidoController {
     }
 
     @PostMapping("/finalizar")
-    public String finalizarPedido(HttpSession session) {
-        session.removeAttribute("pedidoId");
-        return "redirect:/pedidos/lista";
+    public ResponseEntity<String> finalizarPedido(@RequestBody PedidoDTO pedidoDTO) {
+        try {
+            PedidoEntity pedido = pedidoService.criarPedido(
+                pedidoDTO.getVendedorId(), 
+                pedidoDTO.getClienteId()
+            );
+
+            for (ItemPedidoDTO itemDTO : pedidoDTO.getItens()) {
+                pedidoService.adicionarItem(
+                    pedido.getId(),
+                    itemDTO.getProdutoId(),
+                    itemDTO.getQuantidade()
+                );
+            }
+
+            return ResponseEntity.ok("Pedido finalizado com sucesso.");
+        } catch (Exception e) {
+            return ResponseEntity.status(500)
+                .body("Erro ao finalizar pedido: " + e.getMessage());
+        }
     }
 
+    //OK
     @GetMapping("/lista")
     public String listarPedidos(Model model) {
         model.addAttribute("pedidos", pedidoService.listarTodos());
