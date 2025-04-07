@@ -3,10 +3,16 @@ package com.senac.pi.controller;
 import com.senac.pi.model.UsuarioEntity;
 import com.senac.pi.service.UsuarioService;
 import jakarta.servlet.http.HttpSession;
+import java.beans.PropertyEditorSupport;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -71,5 +77,22 @@ public class UsuarioController {
     public String listarUsuarios(Model model) {
         model.addAttribute("usuarios", usuarioService.listarTodos());
         return "listaUsuarios";
+    }
+    
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        binder.registerCustomEditor(Date.class, new PropertyEditorSupport() {
+            @Override
+            public void setAsText(String text) {
+                try {
+                    LocalDate localDate = LocalDate.parse(text, formatter);
+                    setValue(Date.valueOf(localDate));
+                } catch (Exception e) {
+                    setValue(null);
+                }
+            }
+        });
     }
 }
