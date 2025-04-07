@@ -3,28 +3,25 @@ $(document).ready(function() {
     let itens = [];
     let total = 0;
 
-    $('#btnAdicionar').click(function() {
+    $('#btnAdicionar').click(function () {
         const produtoId = $('#produto').val();
-        const produtoNome = $('#produto option:selected').text().split(' (R$')[0];
         const quantidade = parseInt($('#quantidade').val());
-        const preco = parseFloat($('#produto option:selected').text().match(/R\$\s([\d,]+)/)[1].replace(',', '.'));
-        const subtotal = preco * quantidade;
 
-        itens.push({
-            produtoId: produtoId,
-            produtoNome: produtoNome,
-            quantidade: quantidade,
-            preco: preco,
-            subtotal: subtotal
-        });
-
-        atualizarTabelaItens();
-        
-        $.post('/pedidos/adicionar-item', {
-            produtoId: produtoId,
-            quantidade: quantidade
-        }).fail(function() {
-            alert('Erro ao adicionar item');
+        $.ajax({
+            url: '/pedidos/adicionar-item',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                produtoId: produtoId,
+                quantidade: quantidade
+            }),
+            success: function (response) {
+                console.log("Item adicionado com sucesso:", response);
+                // aqui você pode adicionar o item à tabela, etc
+            },
+            error: function (xhr) {
+                alert('Erro ao adicionar item: ' + xhr.responseText);
+            }
         });
 
         $('#produto').val('');

@@ -36,7 +36,7 @@ public class UsuarioController {
             session.setAttribute("usuarioLogado", usuario);
             return "redirect:/redirect-by-role";
         } else {
-            return "redirect:/?erro=Login+ou+senha+inválidos";
+            return "redirect:/?erro=Login+ou+senha+invalidos";
         }
     }
     
@@ -48,7 +48,7 @@ public class UsuarioController {
     }
     
     @GetMapping("/cadastro")
-    public String mostrarFormularioCadastro(Model model) {
+    public String mostrarFormularioCadastro(Model model) {       
         UsuarioEntity usuario = new UsuarioEntity();
         usuario.setTipo("CLIENTE");
         model.addAttribute("usuario", usuario);
@@ -60,17 +60,19 @@ public class UsuarioController {
         
         if (usuarioService.loginExiste(usuario.getLogin())) {
             model.addAttribute("mensagemErro", "Login já está em uso");
+            model.addAttribute("usuario", usuario);
             return "cadastroUsuario";
         }
         
         if (usuarioService.emailExiste(usuario.getEmail())) {
             model.addAttribute("mensagemErro", "E-mail já está em uso");
+            model.addAttribute("usuario", usuario);
             return "cadastroUsuario";
         }
 
         usuario.setTipo("CLIENTE");
         usuarioService.salvar(usuario);
-        return "redirect:/usuarios/lista?sucesso";
+        return "index";
     }
 
     @GetMapping("/lista")

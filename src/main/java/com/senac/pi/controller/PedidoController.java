@@ -1,9 +1,14 @@
 package com.senac.pi.controller;
 
+import com.senac.pi.model.ItemPedidoDTO;
+import com.senac.pi.model.ItemPedidoEntity;
+import com.senac.pi.model.ProdutoEntity;
 import com.senac.pi.repository.ProdutoRepository;
 import com.senac.pi.repository.UsuarioRepository;
 import com.senac.pi.service.PedidoService;
+import com.senac.pi.service.ProdutoService;
 import jakarta.servlet.http.HttpSession;
+import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,6 +21,9 @@ public class PedidoController {
 
     @Autowired
     private PedidoService pedidoService;
+    
+    @Autowired
+    private ProdutoService produtoService;
     
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -32,19 +40,22 @@ public class PedidoController {
     }
 
     @PostMapping("/adicionar-item")
-    @ResponseBody
-    public ResponseEntity<?> adicionarItem(
-            @RequestParam Long produtoId,
-            @RequestParam Integer quantidade,
-            HttpSession session) {
-        
-        Long pedidoId = (Long) session.getAttribute("pedidoId");
-        if (pedidoId == null) {
-            return ResponseEntity.badRequest().body("Pedido não iniciado");
+    public ResponseEntity<ItemPedidoEntity> adicionarItem(@RequestBody ItemPedidoDTO itemDTO) {
+        ProdutoEntity produto = produtoService.buscarPorId(itemDTO.getProdutoId());
+
+        if (produto == null) {
+            return ResponseEntity.badRequest().build(); // produto não encontrado
         }
-        
-        pedidoService.adicionarItem(pedidoId, produtoId, quantidade);
-        return ResponseEntity.ok().build();
+
+        Integer quantidade = itemDTO.getQuantidade();
+        BigDecimal subtotal = produto.getPreco().multiply(BigDecimal.valueOf(quantidade));
+
+        ItemPedidoEntity item = new ItemPedidoEntity();
+        item.setProduto(produto);
+        item.setQuantidade(quantidade);
+        item.setSubtotal(subtotal);
+
+        return ResponseEntity.ok(item);
     }
 
     @PostMapping("/finalizar")

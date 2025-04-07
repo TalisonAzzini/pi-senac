@@ -15,8 +15,12 @@ public class ProdutoService {
     public List<ProdutoEntity> listarTodos() {
         return produtoRepository.findAll();
     }
-
+    
     public ProdutoEntity salvar(ProdutoEntity produto) {
         return produtoRepository.save(produto);
+    }
+    
+    public ProdutoEntity buscarPorId(Long id) {
+        return produtoRepository.findById(id).orElse(null);
     }
 }
