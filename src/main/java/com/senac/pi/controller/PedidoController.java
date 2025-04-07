@@ -1,60 +1,61 @@
 package com.senac.pi.controller;
 
-import com.senac.pi.model.ItemPedido;
-import com.senac.pi.model.Pedido;
-import com.senac.pi.model.Produto;
-import com.senac.pi.model.enums.StatusPedido;
+import com.senac.pi.repository.ProdutoRepository;
+import com.senac.pi.repository.UsuarioRepository;
 import com.senac.pi.service.PedidoService;
-import com.senac.pi.service.ProdutoService;
-import lombok.RequiredArgsConstructor;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/pedidos")
-@SessionAttributes("pedido")
-@RequiredArgsConstructor
 public class PedidoController {
 
-    private final PedidoService pedidoService;
-    private final ProdutoService produtoService;
+    @Autowired
+    private PedidoService pedidoService;
+    
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+    
+    @Autowired
+    private ProdutoRepository produtoRepository;
 
     @GetMapping("/novo")
-    public String iniciarPedido(Model model) {
-        model.addAttribute("pedido", new Pedido());
+    public String novoPedido(Model model) {
+        model.addAttribute("vendedores", usuarioRepository.findByTipo("VENDEDOR"));
+        model.addAttribute("clientes", usuarioRepository.findByTipo("CLIENTE"));
+        model.addAttribute("produtos", produtoRepository.findAll());
         return "cadastroPedido";
     }
 
     @PostMapping("/adicionar-item")
-    public String adicionarItem(
-        @ModelAttribute("pedido") Pedido pedido,
-        @RequestParam Long produtoId,
-        @RequestParam Integer quantidade,
-        RedirectAttributes attributes) {
-
-        Produto produto = produtoService.buscarPorId(produtoId);
-        ItemPedido item = new ItemPedido();
-        item.setProduto(produto);
-        item.setQuantidade(quantidade);
+    @ResponseBody
+    public ResponseEntity<?> adicionarItem(
+            @RequestParam Long produtoId,
+            @RequestParam Integer quantidade,
+            HttpSession session) {
         
-        pedido.adicionarItem(item);
+        Long pedidoId = (Long) session.getAttribute("pedidoId");
+        if (pedidoId == null) {
+            return ResponseEntity.badRequest().body("Pedido não iniciado");
+        }
         
-        attributes.addFlashAttribute("mensagem", "Item adicionado!");
-        return "redirect:/pedidos/novo";
+        pedidoService.adicionarItem(pedidoId, produtoId, quantidade);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/finalizar")
-    public String finalizarPedido(
-        @ModelAttribute("pedido") Pedido pedido,
-        SessionStatus sessionStatus) {
+    public String finalizarPedido(HttpSession session) {
+        session.removeAttribute("pedidoId");
+        return "redirect:/pedidos/lista";
+    }
 
-        pedido.setStatus(StatusPedido.FINALIZADO);
-        pedidoService.salvar(pedido);
-        sessionStatus.setComplete();
-        
-        return "redirect:/pedidos/" + pedido.getId();
+    @GetMapping("/lista")
+    public String listarPedidos(Model model) {
+        model.addAttribute("pedidos", pedidoService.listarTodos());
+        return "listaPedidos";
     }
 }

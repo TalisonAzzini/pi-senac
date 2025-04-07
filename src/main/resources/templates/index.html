@@ -1,37 +1,73 @@
 <!DOCTYPE html>
 
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
     <head>
-        <title>Página Inicial</title>
+        <title>Sistema Comercial</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+            .sidebar {
+                min-height: 100vh;
+                background-color: #f8f9fa;
+                border-right: 1px solid #dee2e6;
+            }
+            .main-content {
+                padding: 20px;
+            }
+        </style>
     </head>
-    <body class="p-4">
-        <div class="container">
-            <div class="mb-4">
-                <a href="cadastroUsuario.html" class="btn btn-outline-primary me-2">Registre-se</a>
-                <a href="listaProdutos.html" class="btn btn-outline-secondary">Lista de Produtos</a>
-            </div>
-            <div class="card p-4" style="max-width: 400px;">
-                <h2 class="mb-3">Bem-vindo!</h2>
-                <form id="frmLogin">
-                    <div class="mb-3">
-                        <label for="login" class="form-label">Login:</label>
-                        <input type="text" id="login" name="login" class="form-control">
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-3 col-lg-2 d-md-block sidebar">
+                    <div class="p-4">
+                        <h4 class="mb-4">Menu</h4>
+                        <ul class="nav flex-column">
+                            <li class="nav-item mb-2">
+                                <a class="btn btn-outline-primary w-100" href="/usuarios/cadastro">Registrar Cliente</a>
+                            </li>
+
+                            <li class="nav-item mb-2">
+                                <a class="btn btn-outline-secondary w-100" href="/produtos/lista">Lista de Produtos</a>
+                            </li>
+
+                            <li class="nav-item mb-2">
+                                <a class="btn btn-outline-success w-100" href="/pedidos/novo">Novo Pedido</a>
+                            </li>
+
+                            <li class="nav-item mb-2">
+                                <a class="btn btn-outline-info w-100" href="/pedidos/lista">Lista de Pedidos</a>
+                            </li>
+                        </ul>
                     </div>
-                    <div class="mb-3">
-                        <label for="senha" class="form-label">Senha:</label>
-                        <input type="password" id="senha" name="senha" class="form-control">
+                </div>
+
+                <div class="col-md-9 col-lg-10 main-content">
+                    <div class="card p-4" style="max-width: 400px; margin: 0 auto;">
+                        <h2 class="mb-3 text-center">Bem-vindo!</h2>
+
+                        <form id="frmLogin" th:action="@{/usuarios/login}" method="post">
+                            <div class="mb-3">
+                                <label for="login" class="form-label">Login:</label>
+                                <input type="text" id="login" name="login" class="form-control" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="senha" class="form-label">Senha:</label>
+                                <input type="password" id="senha" name="senha" class="form-control" required>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">Entrar</button>
+                        </form>
+                        <div th:if="${param.erro}" class="alert alert-danger mt-3" th:text="${param.erro}"></div>
                     </div>
-                    <button type="submit" class="btn btn-primary w-100">Entrar</button>
-                </form>
+                </div>
             </div>
         </div>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="/validar.js"></script>
+        <script src="/js/pedido.js"></script>
     </body>
 </html>
