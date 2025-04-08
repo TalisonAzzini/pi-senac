@@ -89,7 +89,7 @@ $(document).ready(function () {
             }),
             success: function () {
                 alert("Pedido finalizado com sucesso!");
-                window.location.href = "/pedidos/lista";
+                window.location.href = "/redirect-by-role";
             },
             error: function (xhr) {
                 alert("Erro ao finalizar pedido: " + xhr.responseText);

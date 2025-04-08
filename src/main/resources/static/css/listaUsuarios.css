@@ -1,0 +1,11 @@
+.user-table {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.badge-client {
+    background-color: #0d6efd;
+}
+
+.badge-seller {
+    background-color: #198754;
+}

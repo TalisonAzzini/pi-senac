@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
         <title>Lista de Produtos</title>
@@ -6,52 +7,59 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+        <link rel="stylesheet" href="/css/listaProdutos.css"
     </head>
-    
-    <body class="p-4">    
-        <div class="mt-4">
-            <a th:href="@{/redirect-by-role}" class="btn btn-secondary">
-                <i class="bi bi-arrow-left"></i> Voltar ao Menu
-            </a>
-        </div>
+
+    <body class="bg-light p-4">
         <div class="container">
-            <h1 class="mb-4"><strong>Lista de Produtos</strong></h1>
-            
-            <div th:if="${param.sucesso}" class="alert alert-success">
-                Produto adicionado à lista de desejos com sucesso!
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <a th:href="@{/redirect-by-role}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Voltar
+                </a>
+                <h1 class="mb-0 text-primary">
+                    <i class="bi bi-box-seam"></i> Lista de Produtos
+                </h1>
             </div>
 
-            <table class="table table-striped table-bordered align-middle">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Produto</th>
-                        <th>Valor Unitário (R$)</th>
-                        <th>Quantidade</th>
-                        <th>Categoria</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
+            <div th:if="${param.sucesso}" class="alert alert-success alert-dismissible fade show mb-4">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                <span>Produto adicionado à lista de desejos com sucesso!</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
 
-                <tbody>
-                    <tr th:each="produto : ${produtos}">
-                        <td th:text="${produto.nome}"></td>
-                        <td th:text="${#numbers.formatDecimal(produto.preco, 1, 2)}"></td>
-                        <td th:text="${produto.quantidade}"></td>
-                        <td th:text="${produto.categoria}"></td>
-                        <td>
-                            <form th:action="@{/produtos/adicionar-lista-desejos}" method="post">
-                                <input type="hidden" name="produtoId" th:value="${produto.id}">
-                                <button type="submit" class="btn btn-outline-primary btn-sm">
-                                    <i class="bi bi-heart"></i> Adicionar à lista
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="table-responsive rounded">
+                <table class="table table-hover table-bordered product-table">
+                    <thead class="table-primary">
+                        <tr>
+                            <th class="align-middle">Produto</th>
+                            <th class="align-middle text-end">Valor Unitário</th>
+                            <th class="align-middle text-center">Estoque</th>
+                            <th class="align-middle">Categoria</th>
+                            <th class="align-middle text-center">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="produto : ${produtos}">
+                            <td class="align-middle fw-semibold" th:text="${produto.nome}"></td>
+                            <td class="align-middle text-end" th:text="'R$ ' + ${#numbers.formatDecimal(produto.preco, 1, 2)}"></td>
+                            <td class="align-middle text-center" th:text="${produto.quantidade}"></td>
+                            <td class="align-middle">
+                                <span class="badge bg-secondary" th:text="${produto.categoria}"></span>
+                            </td>
+                            <td class="align-middle text-center">
+                                <form th:action="@{/produtos/adicionar-lista-desejos}" method="post">
+                                    <input type="hidden" name="produtoId" th:value="${produto.id}">
+                                    <button type="submit" class="btn btn-sm btn-outline-primary action-btn">
+                                        <i class="bi bi-heart me-1"></i> Lista de Desejos
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-        
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </body>
 </html>

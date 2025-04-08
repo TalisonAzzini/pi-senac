@@ -11,10 +11,12 @@ import com.senac.pi.service.PedidoService;
 import com.senac.pi.service.ProdutoService;
 import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @Controller
 @RequestMapping("/pedidos")
@@ -96,7 +98,7 @@ public class PedidoController {
     public String detalhesPedido(@PathVariable Long id, Model model) {
         PedidoEntity pedido = pedidoService.buscarPorId(id)
             .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
-
+        
         model.addAttribute("pedido", pedido);
         return "detalhesPedido";
     }

@@ -1,0 +1,30 @@
+.sidebar {
+    min-height: 100vh;
+    background-color: #f8f9fa;
+    border-right: 1px solid #dee2e6;
+    padding: 2rem 1rem;
+}
+
+.login-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding-top: 3rem;
+}
+
+.brand-logo {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    color: #0d6efd;
+}
+
+.nav-link-custom {
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    margin-bottom: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.nav-link-custom:hover {
+    background-color: #e9ecef;
+}

@@ -3,6 +3,7 @@ package com.senac.pi.model;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -29,7 +30,7 @@ public class PedidoEntity {
     @ManyToOne
     private UsuarioEntity cliente;
 
-    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ItemPedidoEntity> itens = new ArrayList<>();
 
     @Column(precision = 10, scale = 2)
