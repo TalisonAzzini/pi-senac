@@ -1,6 +1,17 @@
 <h1 align="center">Projeto Integrador - Senac</h1>
-<h3 align="center">🔨 Em desenvolvimento <h3>
 <br>
+<h3>
+<div align="center">
+  <h3>📑 Descrição</h3>
+  <p>O projeto busca desenvolver um sistema web de uma loja de informática, com funcionalidades para funcionarios e clientes.</p>
+  <br>
+  
+  <h3>Funcionalidades</h3>
+  <li>Cadastrar usuários</li>
+  <li>Cadastrar pedidos</li>
+  <li>realizar avaliações</li>
+  <li>Adicionar produtos a lista de desejos</li>
+</div>
 
 <div align="center">
     <h2>💻 Técnologias</h2>
@@ -19,14 +30,6 @@
     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" height="40" alt="bootstrap logo"  />
     <img width="12" />
     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" height="40" alt="javascript logo"  />
-</div>
-
-</div>
-<br>
-
-<div align="center">
-  <h2>:construction_worker: Desenvolvedores</h2>
-  <ul><il>Talison Azzini</il></ul>
 </div>
 <br>
 
