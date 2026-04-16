@@ -13,6 +13,8 @@
   <li>Adicionar produtos a lista de desejos</li>
 </div>
 
+<br>
+
 <div align="center">
     <h2>💻 Técnologias</h2>
     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" height="40" alt="java logo"  />
@@ -30,17 +32,4 @@
     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" height="40" alt="bootstrap logo"  />
     <img width="12" />
     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" height="40" alt="javascript logo"  />
-</div>
-<br>
-
-<div align="center">
-  <h2>📑 Descrição</h3>
-  <p>O projeto busca desenvolver um sistema web de uma loja de informática, com funcionalidades para funcionarios e clientes.</p>
-  <br>
-  
-  <h3>Funcionalidades</h3>
-  <li>Cadastrar usuários</li>
-  <li>Cadastrar pedidos</li>
-  <li>realizar avaliações</li>
-  <li>Adicionar produtos a lista de desejos</li>
 </div>
